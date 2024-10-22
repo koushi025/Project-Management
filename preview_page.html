@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Project</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            padding: 40px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .project-details {
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .project-details label {
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .edit-button {
+            color: orangered;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        .submit-button {
+            background-color: orangered;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            font-size: 1em;
+        }
+        .project-details span {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Preview Project</h2>
+    <div class="project-details">
+        <label>Project Title:</label>
+        <span id="previewTitle"></span>
+        
+        <br>
+
+        <label>Project ID:</label>
+        <span id="previewID"></span>
+        
+        <br>
+
+        <label>Project Description:</label>
+        <span id="previewDescription"></span>
+        
+        <br>
+
+        <label>Team Size:</label>
+        <span id="previewTeamSize"></span>
+        
+        <br>
+
+        <label>Tasks:</label>
+        <ul id="previewTasks"></ul>
+
+        <label>Start Date:</label>
+        <span id="previewStartDate"></span>
+        
+        <br>
+
+        <label>End Date:</label>
+        <span id="previewEndDate"></span>
+        
+        <br>
+
+        <label>Number of Reviews:</label>
+        <span id="previewNumReviews"></span>
+        
+        <br>
+
+        <label>Review Dates:</label>
+        <ul id="previewReviewDates"></ul>
+    </div>
+
+    <button class="submit-button" onclick="submitProject()">Submit Project</button>
+
+    <script>
+        // Function to retrieve the query parameter from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to populate the preview page with data from localStorage
+        // Function to populate the preview page with data from localStorage
+function populatePreview() {
+    const projectId = getQueryParam('id'); // Get the project ID from the URL
+    const storedProjects = JSON.parse(localStorage.getItem('projects')) || [];
+    const projectData = storedProjects.find(project => project.id === projectId); // Find the project by ID
+
+    if (projectData) {
+        document.getElementById('previewTitle').textContent = projectData.title;
+        document.getElementById('previewID').textContent = projectData.id;
+        document.getElementById('previewDescription').textContent = projectData.description;
+        document.getElementById('previewTeamSize').textContent = projectData.teamSize;
+
+        const tasksList = document.getElementById('previewTasks');
+        projectData.tasks.forEach(task => {
+            const li = document.createElement('li');
+            li.textContent = `Task: ${task.title}, Status: ${task.status}`; // Access task properties
+            tasksList.appendChild(li);
+        });
+
+        document.getElementById('previewStartDate').textContent = projectData.startDate;
+        document.getElementById('previewEndDate').textContent = projectData.endDate;
+        document.getElementById('previewNumReviews').textContent = projectData.numReviews;
+
+        const reviewDatesList = document.getElementById('previewReviewDates');
+        projectData.reviewDates.forEach((review, index) => {
+            const li = document.createElement('li');
+            li.textContent = `Review ${index + 1}: ${review.date}`;
+            reviewDatesList.appendChild(li);
+        });
+    }
+}
+
+
+        // Function to handle editing fields
+        
+
+        // Function to submit project and redirect to the previous projects page
+        function submitProject() {
+            // Redirect to previous_projects.html after form submission
+            window.location.href = 'previous_projects.html'; // Adjust the URL to your projects page
+        }
+
+        // Call the function to populate the preview page
+        populatePreview();
+    </script>
+</body>
+</html>

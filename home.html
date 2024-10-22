@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project Management Tool</title>
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    /* Import Google Fonts */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+
+    * {
+      margin: 0;
+      padding: 0;
+      outline: none;
+      border: none;
+      text-decoration: none;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #dfe9f5;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    nav {
+      height: 100vh;
+      background: #fff;
+      width: 180px;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+      position: fixed; /* Fixed position */
+    }
+
+    .logo {
+      text-align: center;
+      display: flex;
+      margin: 20px 0;
+    }
+
+    .logo span {
+      font-weight: bold;
+      padding-left: 15px;
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+
+    a {
+      color: rgb(85, 83, 83);
+      font-size: 14px;
+      display: flex;
+      flex-direction: column; /* Stack icon and label */
+      align-items: center;
+      width: 100%;
+      padding: 10px 20px; /* Added left padding */
+      transition: background 0.3s;
+    }
+
+    a:hover {
+      background: #eee;
+    }
+
+    nav .fas {
+      font-size: 30px; /* Increased icon size */
+      margin-bottom: 5px; /* Space between icon and text */
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 10px 20px; /* Adjusted padding for logout */
+    }
+
+    /* Main Section */
+    .main {
+      margin-left: 250px; /* Adjusted to accommodate sidebar */
+      padding: 20px;
+    }
+
+    .main-top {
+      display: flex;
+      justify-content: center; /* Center the title */
+      align-items: center;
+      position: relative; /* Allow absolute positioning of the icon */
+    }
+
+    .main-top h1 {
+      color: rgb(43, 27, 46);
+      position: absolute; /* Positioning the title */
+      left: 50%; /* Centering */
+      transform: translateX(-50%); /* Adjust for the width of the title */
+      margin: 0; /* Remove default margin */
+    }
+
+    .main-top i {
+      color: rgb(110, 109, 109);
+      cursor: pointer;
+      margin-left: 1000px; /* Optional: space between title and icon */
+    }
+
+    .main-projects,
+    .who-are-you {
+      margin-top: 20px;
+      padding: 20px; /* Added padding to each section */
+      background: #fff; /* Optional: Add background color to sections */
+      border-radius: 10px; /* Optional: Add rounded corners */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+    }
+
+    .main-projects h1,
+    .who-are-you h1 {
+      margin-bottom: 20px; /* Space between header and cards */
+    }
+
+    /* Card Styling */
+    .card {
+      background: #fff;
+      text-align: center;
+      border-radius: 20px;
+      padding: 30px; /* Increased padding */
+      margin: 10px; /* Adjust margin for spacing */
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+      flex: 1; /* Allow cards to grow equally */
+      min-width: 250px; /* Set minimum width for responsiveness */
+      max-width: 300px; /* Set maximum width */
+      transition: transform 0.2s; /* Transition for hover effect */
+    }
+
+    .card:hover {
+      transform: scale(1.05); /* Scale effect on hover */
+    }
+
+    .main-projects .card,
+    .who-are-you .card {
+      display: flex;
+      flex-direction: column; /* Stack elements vertically */
+    }
+
+    .main-projects {
+      display: flex; /* Use flexbox for horizontal layout */
+      flex-wrap: wrap; /* Allow wrapping of cards */
+    }
+
+    .who-are-you {
+      display: flex; /* Use flexbox for horizontal layout */
+      flex-wrap: wrap; /* Allow wrapping of cards */
+    }
+
+    .card h3 {
+      margin: 10px 0;
+      text-transform: capitalize;
+    }
+
+    .card p {
+      font-size: 14px; /* Increase font size */
+      margin: 5px 0;
+    }
+
+    .card button {
+      background: orangered;
+      color: #fff;
+      padding: 12px 25px; /* Increased padding for buttons */
+      border-radius: 10px;
+      margin-top: 15px;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    .card button:hover {
+      background: rgba(223, 70, 15, 0.856);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li>
+          <a href="#" class="logo">
+            <span class="nav-item">Project Management System</span>
+          </a>
+        </li>
+        <li>
+          <a href="previous_projects.html">
+            <i class="fas fa-tasks"></i>
+            <span class="nav-item">Projects</span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="tasks.html">
+            <i class="fas fa-calendar-check"></i>
+            <span class="nav-item">Tasks</span>
+          </a>
+        </li>
+        <li>
+          <a href="login.html" class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="main">
+      <div class="main-top">
+        <h1>Dashboard</h1>
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <br>
+      <br>
+      <h1>Recent Projects</h1>
+      <section class="main-projects" id="recentProjects">
+        <!-- Project cards will be dynamically inserted here -->
+      </section>
+      <br>
+      <h1>Actions</h1>
+      <section class="who-are-you">
+        <div class="card">
+          <h3>Admin</h3>
+          <p>(Build your Projects here)</p>
+          <button onclick="location.href='new_project.html'">BUILD</button>
+        </div>
+        <div class="card">
+          <h3>Member</h3>
+          <p>(Access the Tasks here)</p>
+          <button onclick="location.href='tasks.html'">ACCESS TASKS</button>
+        </div>
+        <div class="card">
+          <h3>Old- Projects</h3>
+          <p>(Check your project status here)</p>
+          <button onclick="location.href='previous_projects.html'">CHECK STATUS</button>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    // Retrieve stored projects from localStorage (from previous projects)
+    const storedProjects = JSON.parse(localStorage.getItem('projects')) || [];
+
+    // Function to display the most recent projects on the home page
+    function displayRecentProjects() {
+        const recentProjectsContainer = document.getElementById('recentProjects');
+        recentProjectsContainer.innerHTML = ''; // Clear the container
+
+        // Get the most recent projects (limit to 3)
+        const recentProjects = storedProjects.slice(-3).reverse(); // Get the last 3 projects
+
+        recentProjects.forEach(project => {
+            const projectCard = document.createElement('div');
+            projectCard.className = 'card';
+            projectCard.innerHTML = `
+                <h3>${project.title}</h3>
+                <p>Start Date: ${project.startDate}</p>
+                <p>End Date: ${project.endDate}</p>
+                <button onclick="location.href='preview_page.html?id=${project.id}'">View Project</button>
+            `;
+            recentProjectsContainer.appendChild(projectCard);
+        });
+    }
+
+    // Call the function when the page loads
+    document.addEventListener('DOMContentLoaded', displayRecentProjects);
+  </script>
+</body>
+</html>

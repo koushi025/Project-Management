@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Page - Project Management Tool</title>
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    /* Import Google Fonts */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+
+    * {
+      margin: 0;
+      padding: 0;
+      outline: none;
+      border: none;
+      text-decoration: none;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #dfe9f5;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    nav {
+      height: 100vh;
+      background: #fff;
+      width: 280px;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+      position: fixed; /* Fixed position */
+    }
+
+    .logo {
+      text-align: center;
+      display: flex;
+      margin: 20px 0;
+    }
+
+    .logo span {
+      font-weight: bold;
+      padding-left: 15px;
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+
+    a {
+      color: rgb(85, 83, 83);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 10px 20px;
+      transition: background 0.3s;
+    }
+
+    a:hover {
+      background: #eee;
+    }
+
+    nav .fas {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* Main Section */
+    .main {
+      margin-left: 280px; /* Adjusted to accommodate sidebar */
+      padding: 20px;
+    }
+
+    .main-top {
+      display: flex;
+      justify-content: center; /* Center the title */
+      align-items: center;
+      position: relative; /* Allow absolute positioning of the icon */
+    }
+
+    .main-top h1 {
+      color: rgb(43, 27, 46);
+      position: absolute; /* Positioning the title */
+      left: 50%; /* Centering */
+      transform: translateX(-50%); /* Adjust for the width of the title */
+      margin: 0; /* Remove default margin */
+    }
+
+    .main-top i {
+      color: rgb(110, 109, 109);
+      cursor: pointer;
+      margin-left: 1000px; /* Optional: space between title and icon */
+    }
+
+    .admin-actions {
+      margin-top: 20px;
+      padding: 20px; /* Added padding to this section */
+      background: #fff; /* Optional: Add background color to this section */
+      border-radius: 10px; /* Optional: Add rounded corners */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+      text-align: center; /* Center align text */
+    }
+
+    .admin-actions button {
+      background: orangered;
+      color: #fff;
+      padding: 12px 25px; /* Increased padding for buttons */
+      border-radius: 10px;
+      margin: 10px; /* Margin between buttons */
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    .admin-actions button:hover {
+      background: rgba(223, 70, 15, 0.856);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li>
+          <a href="#" class="logo">
+            <span class="nav-item">Project Management</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fas fa-tasks"></i>
+            <span class="nav-item">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fas fa-users"></i>
+            <span class="nav-item">Team</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fas fa-chart-line"></i>
+            <span class="nav-item">Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="home.html">
+            <i class="fas fa-calendar-check"></i>
+            <span class="nav-item">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fas fa-cog"></i>
+            <span class="nav-item">Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fas fa-question-circle"></i>
+            <span class="nav-item">Help</span>
+          </a>
+        </li>
+        <li>
+          <a href="login.html" class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-item">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="main">
+      <div class="main-top">
+        <h1>Admin Page</h1>
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <br>
+      <br>
+      <h1>Admin Actions</h1>
+      <section class="admin-actions">
+        <button onclick="location.href='new_project.html'">New Project</button>
+        <button onclick="location.href='previous_projects.html'">Previous Projects</button>
+      </section>
+    </section>
+  </div>
+</body>
+</html>

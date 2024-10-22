@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Previous Projects - Project Management Tool</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #dfe9f5;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-buttons a {
+      color: rgb(85, 83, 83);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      margin-left: 20px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .header-buttons a:hover {
+      background: #eee;
+    }
+
+    .header-buttons .fas {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .main {
+      margin-top: 60px; /* Space for the header */
+      padding: 20px;
+      width: 100%;
+    }
+
+    .main-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .main-top h1 {
+      color: rgb(43, 27, 46);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+    }
+
+    .project-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .project-table th, .project-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .project-table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .project-table td button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    .inprogress-btn, .done-btn {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .undo-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .undo-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with Home and Log Out Buttons -->
+  <div class="header">
+    <div class="logo">Project Management</div>
+    <div class="header-buttons">
+      <a href="home.html">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="login.html">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <section class="main">
+    <div class="main-top">
+      <h1>Projects</h1>
+    </div>
+    
+    <!-- Projects Table -->
+    <table class="project-table">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="projectTableBody">
+        <!-- Project details will be dynamically inserted here -->
+      </tbody>
+    </table>
+    <br>
+    <!-- In Progress Projects Section -->
+    <h2>In Progress</h2>
+    <table class="project-table">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Undo</th>
+        </tr>
+      </thead>
+      <tbody id="inProgressTableBody">
+        <!-- In Progress projects will be dynamically inserted here -->
+      </tbody>
+    </table>
+    <br>
+    <!-- Done Projects Section -->
+    <h2>Done</h2>
+    <table class="project-table">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Status</th>
+          <th>Undo</th>
+        </tr>
+      </thead>
+      <tbody id="doneTableBody">
+        <!-- Done projects will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    // Retrieve stored projects and tasks from localStorage
+    const storedProjects = JSON.parse(localStorage.getItem('projects')) || [];
+    const inProgressProjects = JSON.parse(localStorage.getItem('inProgressProjects')) || [];
+    const doneProjects = JSON.parse(localStorage.getItem('doneProjects')) || [];
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Function to populate the project table
+    function populateProjectTable() {
+        const projectTableBody = document.getElementById('projectTableBody');
+        projectTableBody.innerHTML = ''; // Clear the table before populating
+
+        storedProjects.forEach((project) => {
+            const row = document.createElement('tr');
+
+            // Add project details (project ID, title, start date, end date, status)
+            row.innerHTML = `
+                <td>${project.id}</td>
+                <td>${project.title}</td>
+                <td>${project.startDate}</td>
+                <td>${project.endDate}</td>
+                <td>Not done</td> <!-- Status text -->
+            `;
+
+            // Append the row to the table body
+            projectTableBody.appendChild(row);
+        });
+    }
+
+    // Function to move project to In Progress section
+    function moveToInProgress(index) {
+        const project = storedProjects.splice(index, 1)[0];
+        inProgressProjects.push(project);
+        localStorage.setItem('projects', JSON.stringify(storedProjects));
+        localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+        populateProjectTable();
+        populateInProgressTable();
+    }
+
+    // Function to populate In Progress table
+    function populateInProgressTable() {
+        const inProgressTableBody = document.getElementById('inProgressTableBody');
+        inProgressTableBody.innerHTML = ''; // Clear the table before populating
+
+        inProgressProjects.forEach((project, index) => {
+            const row = document.createElement('tr');
+
+            // Add project details with Undo button
+            row.innerHTML = `
+                <td>${project.id}</td>
+                <td>${project.title}</td>
+                <td>${project.startDate}</td>
+                <td>${project.endDate}</td>
+                <td>In Progress</td> <!-- Status text -->
+                <td><button class="undo-btn" onclick="undoMoveToProject(${index}, 'inProgress')">Undo</button></td>
+            `;
+
+            // Append the row to the table body
+            inProgressTableBody.appendChild(row);
+        });
+    }
+
+    // Function to check and move project to Done section
+    function checkAndMoveToDone(projectId) {
+        const projectIndex = inProgressProjects.findIndex(p => p.id === projectId);
+        const associatedTasks = tasks.filter(task => task.projectId === projectId);
+
+        if (associatedTasks.every(task => task.status === 'Complete')) {
+            const project = inProgressProjects.splice(projectIndex, 1)[0];
+            doneProjects.push(project);
+            localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+            localStorage.setItem('doneProjects', JSON.stringify(doneProjects));
+            populateInProgressTable();
+            populateDoneTable();
+        }
+    }
+
+    // Function to populate Done table
+    function populateDoneTable() {
+        const doneTableBody = document.getElementById('doneTableBody');
+        doneTableBody.innerHTML = ''; // Clear the table before populating
+
+        doneProjects.forEach((project, index) => {
+            const row = document.createElement('tr');
+
+            // Add project details with Undo button
+            row.innerHTML = `
+                <td>${project.id}</td>
+                <td>${project.title}</td>
+                <td>${project.startDate}</td>
+                <td>${project.endDate}</td>
+                <td>Done</td> <!-- Status text -->
+                <td><button class="undo-btn" onclick="undoMoveToProject(${index}, 'done')">Undo</button></td>
+            `;
+
+            // Append the row to the table body
+            doneTableBody.appendChild(row);
+        });
+    }
+
+    // Function to undo moving a project back to the previous section
+    function undoMoveToProject(index, status) {
+        if (status === 'inProgress') {
+            const project = inProgressProjects.splice(index, 1)[0];
+            storedProjects.push(project);
+            localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+            localStorage.setItem('projects', JSON.stringify(storedProjects));
+            populateInProgressTable();
+            populateProjectTable();
+        } else if (status === 'done') {
+            const project = doneProjects.splice(index, 1)[0];
+            inProgressProjects.push(project);
+            localStorage.setItem('doneProjects', JSON.stringify(doneProjects));
+            localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+            populateDoneTable();
+            populateInProgressTable();
+        }
+    }
+
+    // Initial population of tables
+    populateProjectTable();
+    populateInProgressTable();
+    populateDoneTable();
+  </script>
+</body>
+</html>

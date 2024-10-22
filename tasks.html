@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks - Project Management Tool</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #dfe9f5;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-buttons a {
+      color: rgb(85, 83, 83);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      margin-left: 20px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .header-buttons a:hover {
+      background: #eee;
+    }
+
+    .header-buttons .fas {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .main {
+      margin-top: 60px; /* Space for the header */
+      padding: 20px;
+      width: 100%;
+    }
+
+    .main-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .main-top h1 {
+      color: rgb(43, 27, 46);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+    }
+
+    .task-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .task-table th, .task-table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .task-table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .task-table td button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .in-progress-btn {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .in-progress-btn:hover {
+      background-color: #138496;
+    }
+
+    .done-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .done-btn:hover {
+      background-color: #218838;
+    }
+
+    .undo-btn {
+      background-color: #ffc107;
+      color: #fff;
+    }
+
+    .undo-btn:hover {
+      background-color: #e0a800;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with Home and Log Out Buttons -->
+  <div class="header">
+    <div class="logo">Project Management</div>
+    <div class="header-buttons">
+      <a href="home.html">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="login.html">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <section class="main">
+    <div class="main-top">
+      <h1>Tasks</h1>
+    </div>
+
+    <div>
+      <label for="projectIdInput">Enter Project ID:</label>
+      <input type="text" id="projectIdInput" />
+      <button id="loadTasksBtn">Load Tasks</button>
+    </div>
+
+    <!-- Tasks Table -->
+    <h2>Task List</h2>
+    <table class="task-table" id="taskTable">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="taskTableBody">
+        <!-- Task details will be dynamically inserted here -->
+      </tbody>
+    </table>
+
+    <!-- In Progress Table -->
+    <h2>In Progress Tasks</h2>
+    <table class="task-table" id="inProgressTable">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Done</th>
+          <th>Undo</th>
+        </tr>
+      </thead>
+      <tbody id="inProgressTableBody">
+        <!-- In progress task details will be dynamically inserted here -->
+      </tbody>
+    </table>
+
+    <!-- Done Table -->
+    <h2>Completed Tasks</h2>
+    <table class="task-table" id="doneTable">
+      <thead>
+        <tr>
+          <th>Project ID</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Undo</th>
+        </tr>
+      </thead>
+      <tbody id="doneTableBody">
+        <!-- Completed task details will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    document.getElementById('loadTasksBtn').addEventListener('click', function() {
+        const projectId = document.getElementById('projectIdInput').value.trim();
+        if (projectId) {
+            displayTasksForProject(projectId);
+        } else {
+            alert('Please enter a Project ID.');
+        }
+    });
+
+    function displayTasksForProject(projectId) {
+        const filteredTasks = tasks.filter(task => task.projectId === projectId);
+        
+        const taskTableBody = document.getElementById('taskTableBody');
+        const inProgressTableBody = document.getElementById('inProgressTableBody');
+        const doneTableBody = document.getElementById('doneTableBody');
+
+        // Clear the previous content
+        taskTableBody.innerHTML = '';
+        inProgressTableBody.innerHTML = '';
+        doneTableBody.innerHTML = '';
+
+        filteredTasks.forEach(task => {
+            if (task.status === 'In Progress') {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.projectId}</td>
+                    <td>${task.title}</td>
+                    <td>${task.status}</td>
+                    <td>
+                        <button class="done-btn" onclick="moveToDone('${task.projectId}', '${task.title}')">Done</button>
+                    </td>
+                    <td>
+                        <button class="undo-btn" onclick="undoTask('${task.projectId}', '${task.title}', 'Tasks')">Undo</button>
+                    </td>
+                `;
+                inProgressTableBody.appendChild(row);
+            } else if (task.status === 'Complete') {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.projectId}</td>
+                    <td>${task.title}</td>
+                    <td>${task.status}</td>
+                    <td>
+                        <button class="undo-btn" onclick="undoTask('${task.projectId}', '${task.title}', 'In Progress')">Undo</button>
+                    </td>
+                `;
+                doneTableBody.appendChild(row);
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${task.projectId}</td>
+                    <td>${task.title}</td>
+                    <td>
+                        <button class="in-progress-btn" onclick="moveToInProgress('${task.projectId}', '${task.title}')">In Progress</button>
+                        <button class="done-btn" onclick="moveToDone('${task.projectId}', '${task.title}')">Done</button>
+                    </td>
+                `;
+                taskTableBody.appendChild(row);
+            }
+        });
+    }
+
+    function moveToInProgress(projectId, title) {
+        const taskIndex = tasks.findIndex(task => task.projectId === projectId && task.title === title);
+        if (taskIndex > -1) {
+            tasks[taskIndex].status = 'In Progress'; // Update status
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save to localStorage
+            displayTasksForProject(projectId); // Refresh all task tables
+            checkProjectStatus(projectId); // Check if project status needs to be updated
+        }
+    }
+
+    function moveToDone(projectId, title) {
+        const taskIndex = tasks.findIndex(task => task.projectId === projectId && task.title === title);
+        if (taskIndex > -1) {
+            tasks[taskIndex].status = 'Complete'; // Update status to Complete
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save to localStorage
+            displayTasksForProject(projectId); // Refresh all task tables
+            checkProjectStatus(projectId); // Check if project status needs to be updated
+        }
+    }
+
+    function undoTask(projectId, title, previousStatus) {
+        const taskIndex = tasks.findIndex(task => task.projectId === projectId && task.title === title);
+        if (taskIndex > -1) {
+            tasks[taskIndex].status = previousStatus === 'Tasks' ? 'Tasks' : 'In Progress'; // Revert to previous status
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save to localStorage
+            displayTasksForProject(projectId); // Refresh all task tables
+            checkProjectStatus(projectId); // Check if project status needs to be updated
+        }
+    }
+
+    function checkProjectStatus(projectId) {
+        const projectTasks = tasks.filter(task => task.projectId === projectId);
+        const inProgressCount = projectTasks.filter(task => task.status === 'In Progress').length;
+        const completeCount = projectTasks.filter(task => task.status === 'Complete').length;
+
+        // Check if all tasks are complete
+        if (inProgressCount === 0 && completeCount === projectTasks.length) {
+            // Move project to Done in previous_projects.html
+            updatePreviousProjectsStatus(projectId, 'done');
+        } else if (inProgressCount > 0) {
+            // Move project to In Progress in previous_projects.html
+            updatePreviousProjectsStatus(projectId, 'in-progress');
+        }
+    }
+
+    function updatePreviousProjectsStatus(projectId, status) {
+        const storedProjects = JSON.parse(localStorage.getItem('projects')) || [];
+        const inProgressProjects = JSON.parse(localStorage.getItem('inProgressProjects')) || [];
+        
+        if (status === 'done') {
+            const projectIndex = inProgressProjects.findIndex(p => p.id === projectId);
+            if (projectIndex !== -1) {
+                const project = inProgressProjects.splice(projectIndex, 1)[0];
+                localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+                localStorage.setItem('doneProjects', JSON.stringify([...JSON.parse(localStorage.getItem('doneProjects')) || [], project]));
+            }
+        } else if (status === 'in-progress') {
+            const projectIndex = storedProjects.findIndex(p => p.id === projectId);
+            if (projectIndex !== -1) {
+                const project = storedProjects[projectIndex];
+                if (!inProgressProjects.some(p => p.id === projectId)) {
+                    inProgressProjects.push(project);
+                    localStorage.setItem('projects', JSON.stringify(storedProjects.filter(p => p.id !== projectId)));
+                    localStorage.setItem('inProgressProjects', JSON.stringify(inProgressProjects));
+                }
+            }
+        }
+    }
+</script>
+
+
+</body>
+</html>

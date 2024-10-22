@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Project</title>
+    <style>
+        /* Reset and Basic Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f3f4f6; /* Light background */
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: #007bff; /* Blue navigation bar */
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        nav h1 {
+            margin: 0;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 10px 0 0 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #d1d1d1;
+        }
+
+        /* Container Styles */
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px); /* Adjust based on nav height */
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        /* Form Step Styles */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-step label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .form-step input[type="text"],
+        .form-step input[type="number"],
+        .form-step input[type="date"],
+        .form-step select,
+        .form-step textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-step input[type="text"]:focus,
+        .form-step input[type="number"]:focus,
+        .form-step input[type="date"]:focus,
+        .form-step select:focus,
+        .form-step textarea:focus {
+            border-color: orangered;
+            outline: none;
+        }
+
+        /* Button Styles */
+        .form-step button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: orangered;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-step button:hover {
+            background-color: rgba(223, 70, 15, 0.856);
+        }
+
+        .form-step .prev-btn {
+            background-color: #6c757d;
+            margin-right: 10px;
+        }
+
+        .form-step .prev-btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+        }
+
+        /* Task Assignment Styles */
+        .task-assignment {
+            margin-bottom: 20px;
+        }
+
+        .task-assignment label {
+            font-weight: normal;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .task-assignment input[type="text"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        .task-assignment input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Create New Project</h2>
+            <form id="projectForm">
+                <!-- Step 1: Project Title and ID -->
+                <div class="form-step active" id="step1">
+                    <label for="projectTitle">Project Title:</label>
+                    <input type="text" id="projectTitle" name="projectTitle" required placeholder="Enter project title">
+
+                    <label for="projectID">Project ID:</label>
+                    <input type="text" id="projectID" name="projectID" required placeholder="Enter project ID">
+
+                    <button type="button" class="next-btn">Next</button>
+                </div>
+
+                <!-- Step 2: Project Description and Team Length -->
+                <div class="form-step" id="step2">
+                    <label for="projectDescription">Project Description:</label>
+                    <textarea id="projectDescription" name="projectDescription" rows="4" required placeholder="Enter project description"></textarea>
+
+                    <label for="teamSize">Team Length:</label>
+                    <input type="number" id="teamSize" name="teamSize" required placeholder="Enter team length">
+
+                    <div id="taskAssignments"></div>
+
+                    <button type="button" class="prev-btn">Previous</button>
+                    <button type="button" class="next-btn">Next</button>
+                </div>
+
+                <!-- Step 3: Task Assignments -->
+                <div class="form-step" id="step3">
+                    <h3>Task Assignments</h3>
+                    <br>
+                    <div id="assignments"></div>
+                    <button type="button" class="prev-btn">Previous</button>
+                    <button type="button" class="next-btn">Next</button>
+                </div>
+
+                <!-- Step 4: Start Date, End Date, Number of Reviews -->
+                <div class="form-step" id="step4">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" required>
+
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" required>
+
+                    <label for="numReviews">Number of Reviews:</label>
+                    <input type="number" id="numReviews" name="numReviews" required placeholder="Enter number of reviews">
+
+                    <button type="button" class="prev-btn">Previous</button>
+                    <button type="button" class="next-btn">Next</button>
+                </div>
+
+                <!-- Step 5: Review Dates -->
+                <div class="form-step" id="step5">
+                    <h3>Review Dates</h3>
+                    <div id="reviewDateInputs"></div>
+
+                    <button type="button" class="prev-btn">Previous</button>
+                    <button type="button" class="next-btn" id="previewProject">Preview</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectForm = document.getElementById('projectForm');
+            const nextButtons = document.querySelectorAll('.next-btn');
+            const prevButtons = document.querySelectorAll('.prev-btn');
+            const stepElements = document.querySelectorAll('.form-step');
+            let currentStep = 0;
+    
+            // Function to show the current step
+            function showStep(step) {
+                stepElements.forEach((el, index) => {
+                    el.classList.toggle('active', index === step);
+                });
+            }
+    
+            // Event listeners for "Next" buttons
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentStep < stepElements.length - 1) {
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                });
+            });
+    
+            // Event listeners for "Previous" buttons
+            prevButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentStep > 0) {
+                        currentStep--;
+                        showStep(currentStep);
+                    }
+                });
+            });
+    
+            // Task Assignment Logic
+            const teamSizeInput = document.getElementById('teamSize');
+            const assignmentsContainer = document.getElementById('assignments');
+    
+            teamSizeInput.addEventListener('change', () => {
+                const teamSize = parseInt(teamSizeInput.value);
+                assignmentsContainer.innerHTML = ''; // Clear any previous assignments
+    
+                for (let i = 0; i < teamSize; i++) {
+                    const assignmentDiv = document.createElement('div');
+                    assignmentDiv.classList.add('task-assignment');
+                    assignmentDiv.innerHTML = `
+                        <label for="memberID${i}">Member ${i + 1} ID:</label>
+                        <input type="text" id="memberID${i}" name="memberID${i}" placeholder="Enter member ${i + 1} ID" required>
+    
+                        <label for="task${i}">Task for Team Member ${i + 1}:</label>
+                        <input type="text" id="task${i}" name="task${i}" placeholder="Enter task for team member ${i + 1}" required>
+                    `;
+                    assignmentsContainer.appendChild(assignmentDiv);
+                }
+            });
+    
+            // Logic for generating Review Date inputs
+            const numReviewsInput = document.getElementById('numReviews');
+            const reviewDateInputsContainer = document.getElementById('reviewDateInputs');
+    
+            numReviewsInput.addEventListener('change', () => {
+                const numReviews = parseInt(numReviewsInput.value);
+                reviewDateInputsContainer.innerHTML = ''; // Clear any previous inputs
+    
+                for (let i = 1; i <= numReviews; i++) {
+                    const reviewDateDiv = document.createElement('div');
+                    reviewDateDiv.innerHTML = `
+                        <label for="reviewDate${i}">Review Date ${i}:</label>
+                        <input type="date" id="reviewDate${i}" name="reviewDate${i}" required>
+                    `;
+                    reviewDateInputsContainer.appendChild(reviewDateDiv);
+                }
+            });
+    
+            // Preview button click handler
+            document.getElementById('previewProject').addEventListener('click', function() {
+                // Collect form data
+                const projectData = {
+                    title: document.getElementById('projectTitle').value,
+                    id: document.getElementById('projectID').value,
+                    description: document.getElementById('projectDescription').value,
+                    teamSize: teamSizeInput.value,
+                    tasks: [],
+                    startDate: document.getElementById('startDate').value,
+                    endDate: document.getElementById('endDate').value,
+                    numReviews: numReviewsInput.value,
+                    reviewDates: []
+                };
+    
+                const teamSize = parseInt(projectData.teamSize);
+                for (let i = 0; i < teamSize; i++) {
+                    projectData.tasks.push({
+                        title: document.getElementById(`task${i}`).value,
+                        memberID: document.getElementById(`memberID${i}`).value, // Store member ID for each task
+                        projectId: projectData.id, // Link task to the project ID
+                        status: "Not Done", // Default status for new tasks
+                    });
+                }
+    
+                const numReviews = parseInt(projectData.numReviews);
+                for (let i = 1; i <= numReviews; i++) {
+                    projectData.reviewDates.push({
+                        date: document.getElementById(`reviewDate${i}`).value,
+                        status: "Not Done" // Default status for new reviews
+                    });
+                }
+    
+                // Retrieve existing projects from localStorage
+                const existingProjects = JSON.parse(localStorage.getItem('projects')) || [];
+                existingProjects.push(projectData); // Add new project to the array
+    
+                // Store the updated projects array in localStorage
+                localStorage.setItem('projects', JSON.stringify(existingProjects));
+    
+                // Store tasks in localStorage
+                const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                existingTasks.push(...projectData.tasks); // Add new tasks to the array
+    
+                // Store the updated tasks array in localStorage
+                localStorage.setItem('tasks', JSON.stringify(existingTasks));
+    
+                // Redirect to preview page with project ID as a query parameter
+                window.location.href = `preview_page.html?id=${projectData.id}`;
+            });
+        });
+    </script>    
+    
+</body>
+</html>
